@@ -15,27 +15,36 @@ class WallServiceTest {
         // проверяем, что после добавления поста id стал отличным от 0
 
         val post = Post(
-            id = 0,
+            id = 1,
             ownerId = 1,
-            createdBy = 123921,
-            text = "Первый пост",
-            postType = "post",
+            fromId = 123456,
+            createdBy = 0,
+            date = 0,
+            text = "_",
+            replyOwnerId = 0,
+            replyPostId = 0,
             friendsOnly = false,
+            postType = "_",
+            signerId = 0,
+            copyHistory = null,
+            canPin = false,
+            canDelete = false,
+            canEdit = false,
+            isPinned = 0,
             markedAsAds = false,
-            likes = Post.Likes(
-                count = 10,
-                userLikes = false,
-                canLike = true,
-                canPublish = true
-            ),
-            comments = Post.Comments(
-                count = 0,
-                canPost = true,
-                groupsCanPost = false,
-                canClose = false,
-                canOpen = true
-            )
+            isFavorite = false,
+            postponedId = 0,
+            postSource = null,
+            geo = null,
+            donut = null,
+            repost = null,
+            views = null,
+            copyright = null,
+            likes = null,
+            comments = null,
+            attachments = emptyList()
         )
+
 
         val addedPost = WallService.add(post)
 
@@ -47,26 +56,34 @@ class WallServiceTest {
 
         val post = WallService.add(
             Post(
-                id = 0,
-                ownerId = 2,
-                createdBy = 343921,
-                text = "Редактируем пост",
-                postType = "post",
+                id = 1,
+                ownerId = 1,
+                fromId = 123456,
+                createdBy = 0,
+                date = 0,
+                text = "_",
+                replyOwnerId = 0,
+                replyPostId = 0,
                 friendsOnly = false,
+                postType = "_",
+                signerId = 0,
+                copyHistory = null,
+                canPin = false,
+                canDelete = false,
+                canEdit = false,
+                isPinned = 0,
                 markedAsAds = false,
-                likes = Post.Likes(
-                    count = 10,
-                    userLikes = false,
-                    canLike = true,
-                    canPublish = true
-                ),
-                comments = Post.Comments(
-                    count = 0,
-                    canPost = true,
-                    groupsCanPost = false,
-                    canClose = false,
-                    canOpen = true
-                )
+                isFavorite = false,
+                postponedId = 0,
+                postSource = null,
+                geo = null,
+                donut = null,
+                repost = null,
+                views = null,
+                copyright = null,
+                likes = null,
+                comments = null,
+                attachments = emptyList()
             )
         )
 
@@ -75,38 +92,46 @@ class WallServiceTest {
         )
         val result = WallService.update(updatedPost)
 
-        assertEquals(true, result)
+        assertTrue(result)
     }
 
     @Test
     fun updateWithAnNonExistingId() {
 
         val post = Post(
-            id = 999,
-            ownerId = 2,
-            createdBy = 343921,
-            text = "Редактируем пост",
-            postType = "post",
+            id = 9999,
+            ownerId = 1,
+            fromId = 123456,
+            createdBy = 0,
+            date = 0,
+            text = "_",
+            replyOwnerId = 0,
+            replyPostId = 0,
             friendsOnly = false,
+            postType = "_",
+            signerId = 0,
+            copyHistory = null,
+            canPin = false,
+            canDelete = false,
+            canEdit = false,
+            isPinned = 0,
             markedAsAds = false,
-            likes = Post.Likes(
-                count = 10,
-                userLikes = false,
-                canLike = true,
-                canPublish = true
-            ),
-            comments = Post.Comments(
-                count = 0,
-                canPost = true,
-                groupsCanPost = false,
-                canClose = false,
-                canOpen = true
-            )
+            isFavorite = false,
+            postponedId = 0,
+            postSource = null,
+            geo = null,
+            donut = null,
+            repost = null,
+            views = null,
+            copyright = null,
+            likes = null,
+            comments = null,
+            attachments = emptyList()
         )
 
         val result = WallService.update(post)
 
-        assertEquals(false, result)
+        assertFalse(result)
 
     }
 }
