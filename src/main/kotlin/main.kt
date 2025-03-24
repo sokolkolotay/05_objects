@@ -174,14 +174,46 @@ data class Link(
     val previewUrl: String
 )
 
+//Задача№3 "Жалобы" темы "07_exception"
+
+enum class ReportReason(val reportId: Int) {
+    SPAM(0),
+    CHILD_PORNOGRAPHY(1),
+    EXTREMISM(2),
+    VIOLENCE(3),
+    DRUG_PROPAGANDA(4),
+    ADULT_CONTENT(5),
+    ABUSE(6),
+    SUICIDE_CALLS(8);
+}
+
+data class Report(
+    val commentId: Int,
+    val reason: ReportReason
+)
+
 // Объект WallService, который хранит посты в массиве.
-object WallService {
+class WallService {
     private var posts = emptyArray<Post>()
+    private var comments = emptyArray<Comment>()
+    private var reports = emptyArray<Report>()
     private var newId: Int = 0
+
+    fun createComment(postId: Int, comment: Comment): Comment {
+        for (post in posts) {
+            if (post.id == postId) {
+                comments += comment
+                return comments.last()
+            }
+        }
+        throw PostNotFoundException("Пост с ID: $postId не найден")
+    }
 
     fun clear() {
         posts = emptyArray()
         // также здесь нужно сбросить счетчик для id постов, если он у вас используется
+        comments = emptyArray()
+        reports = emptyArray()
         newId = 0
     }
 
@@ -209,9 +241,126 @@ object WallService {
         return false
     }
 
+    fun getReports(): Array<Report> {
+        return reports
+    }
+
+    fun reportComment (commentId: Int, reasonId: Int) {
+        val reason = ReportReason.values().find { it.reportId == reasonId }
+            ?: throw IllegalArgumentException("Неверная причина жалобы: $reasonId")
+
+        val comment = comments.find { it.id == commentId }
+            ?: throw CommentNotFoundException("Комментарий с ID: $commentId не найден")
+
+        val post = posts.find { it.id == comment.id }
+            ?: throw PostNotFoundException("Пост для комментария с ID: $commentId не найден")
+
+        reports += Report(commentId, reason)
+        println("Жалоба на комментарий с ID: $commentId по причине: $reason успешно добавлена")
+    }
+
+}
+
+class CommentNotFoundException(message: String): RuntimeException(message)
+class PostNotFoundException(message: String) : RuntimeException(message)
+
+data class Comment(
+    val id: Int,
+    val fromId: Int,
+    val date: Int,
+    val text: String,
+    val donut: Donut,
+    val replyToUser: Int,
+    val replyToComment: Int,
+    val attachments: Attachments,
+    val parentsStack: List<Comment>,
+    val thread: Thread
+) {
+    data class Donut(
+        val isDon: Boolean,
+        val placeholder: String
+    )
+
+    data class Thread(
+        val count: Int,
+        val items: List<Thread>,
+        val canPost: Boolean,
+        val showReplyButton: Boolean,
+        val groupsCanPost: Boolean
+    )
 }
 
 fun main() {
 
+    val wallService = WallService()
+
+    val post = wallService.add(
+        Post(
+            id = 1,
+            ownerId = 1,
+            fromId = 123456,
+            createdBy = 0,
+            date = 0,
+            text = "_",
+            replyOwnerId = 0,
+            replyPostId = 0,
+            friendsOnly = false,
+            postType = "_",
+            signerId = 0,
+            copyHistory = null,
+            canPin = false,
+            canDelete = false,
+            canEdit = false,
+            isPinned = 0,
+            markedAsAds = false,
+            isFavorite = false,
+            postponedId = 0,
+            postSource = null,
+            geo = null,
+            donut = null,
+            repost = null,
+            views = null,
+            copyright = null,
+            likes = null,
+            comments = null,
+            attachments = emptyList()
+        )
+    )
+
+    val comment = Comment(
+        id = 1,
+        fromId = 1,
+        date = 0,
+        text = "",
+        donut = Comment.Donut(
+            isDon = false,
+            placeholder = ""
+        ),
+        replyToUser = 0,
+        replyToComment = 0,
+        attachments = PhotoAttachments(
+            photo = Photo(
+                id = 0,
+                albumId = 0,
+                ownerId = 0,
+                userId = 0,
+                text = "",
+                date = 0,
+                photo130 = "",
+                photo604 = ""
+            )
+        ),
+        parentsStack = emptyList(),
+        thread = Comment.Thread(
+            count = 0,
+            items = emptyList(),
+            canPost = false,
+            showReplyButton = false,
+            groupsCanPost = false
+        )
+    )
+
+    val addedComment = wallService.createComment(post.id, comment)
+    println("Комментарий успешно добавлен: $addedComment")
 }
 
