@@ -3,7 +3,13 @@
 Добрый день! 
 
 Через Pull Request внесены изменения в рамках домашнего задания "07_exceptions" в следующие файлы:
-* src/main/kotlin/main.kt
+* src/main/kotlin/
+  * Comment.kt
+  * Post.kt
+  * Report.kt
+  * Repost.kt
+  * WallService.kt
+  * main.kt
 * src/test/kotlin/WallServiceTest.kt
 * README.md
 
