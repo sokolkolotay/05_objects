@@ -1,3 +1,17 @@
+# Домашнее задание к занятию «3.2. Generics и коллекции»
+
+Добрый день! 
+
+Через Pull Request внесены изменения в рамках домашнего задания "08_collections" в следующие файлы:
+* src/main/kotlin/
+  * Note.kt
+  * NoteComment.kt
+  * NoteService.kt
+* src/test/kotlin/NoteServiceTest.kt
+* README.md
+
+Буду рад получить обратную связь. Спасибо!
+
 # Домашнее задание к занятию «3.1. Исключения»
 
 Добрый день! 
