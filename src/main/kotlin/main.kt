@@ -70,21 +70,33 @@ fun main() {
 //
 //    val addedComment = wallService.createComment(post.id, comment)
 //    println("Комментарий успешно добавлен: $addedComment")
+//
+//
+//    //Работа с заметками 08_collections
+//    val noteService = NoteService()
+//
+//    val noteId1 = noteService.add(1,"Первая заметка", "Текст заметки")
+//    val noteId2 = noteService.add(1, "Вторая заметка", "Текст второй заметки")
+//
+//    val note = noteService.get(
+//        listOf(2), 1, 0, 2,1
+//    )
+//
+//    println("Заметки пользователя 1:")
+//    note.forEach {
+//        println("ID: ${it.id}, Title: ${it.title}, Text: ${it.text} ")
+//    }
 
+    //Работа с чатами
+    val chatService = ChatService()
 
-    //Работа с заметками 08_collections
-    val noteService = NoteService()
+    val message1 = chatService.createMessage(1,"Первое сообщение", 1)
+    val message2 = chatService.createMessage(1, "Второе сообщение", 0)
+    val message3 = chatService.createMessage(1, "Третье сообщение", 0)
+    val message4 = chatService.createMessage(1,"Четвертое сообщение", 0)
+    val message5 = chatService.createMessage(1,"Четвертое сообщение", 1)
 
-    val noteId1 = noteService.add(1,"Первая заметка", "Текст заметки")
-    val noteId2 = noteService.add(1, "Вторая заметка", "Текст второй заметки")
+    println(chatService.getChats(1))
 
-    val note = noteService.get(
-        listOf(2), 1, 0, 2,1
-    )
-
-    println("Заметки пользователя 1:")
-    note.forEach {
-        println("ID: ${it.id}, Title: ${it.title}, Text: ${it.text} ")
-    }
 }
 
