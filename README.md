@@ -1,3 +1,16 @@
+# Домашнее задание к занятию «3.3. Лямбды, extension-функции, операторы»
+Добрый день! 
+
+Через Pull Request внесены изменения в рамках домашнего задания "09_lambda" в следующие файлы:
+* src/main/kotlin/
+  * Chat.kt
+  * Message.kt
+  * ChatService.kt
+* src/test/kotlin/ChatServiceTest.kt
+* README.md
+
+Буду рад получить обратную связь. Спасибо!
+
 # Домашнее задание к занятию «3.2. Generics и коллекции»
 
 Добрый день! 
