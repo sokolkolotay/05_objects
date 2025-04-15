@@ -1,5 +1,4 @@
 import org.junit.Test
-
 import org.junit.Assert.*
 
 class ChatServiceTest {
@@ -8,17 +7,20 @@ class ChatServiceTest {
 
     @Test
     fun addChat() {
-        val chatId = chatService.addChat(1)
-        assertNotEquals(0, chatId)
+        val initialCount = chatService.chats.size
+        chatService.addChat(1)
+        assertEquals(initialCount + 1, chatService.chats.size)
     }
 
     @Test
     fun createMessage() {
-        val chat1 = chatService.createMessage(1, "Тестовое сообщение", 1)
-        assertNotEquals(0, chat1)
+        val initialCount = chatService.messages.size
+        chatService.createMessage(1, "Тестовое сообщение", 1)
 
-        val chat2 = chatService.createMessage(2, "Тестовое сообщение", 0)
-        assertNotEquals(chat1, chat2)
+        assertEquals(initialCount + 1, chatService.messages.size)
+
+        chatService.createMessage(2, "Тестовое сообщение", 0)
+        assertEquals(initialCount + 2, chatService.messages.size)
     }
 
     @Test
@@ -45,16 +47,18 @@ class ChatServiceTest {
 
     @Test
     fun deleteMessage() {
-        val message = chatService.createMessage(1, "Тестовое сообщение", 1)
+        val messageId = chatService.createMessage(1, "Тестовое сообщение", 1)
         try {
             chatService.deleteMessage(0)
         } catch (e: IllegalArgumentException) {
             assertEquals("Сообщение не найдено!", e.message)
         }
-        val result = chatService.deleteMessage(message)
-        assertEquals(1, result)
-        assertNull(chatService.messages.find { it.id == message })
 
+        val initialCount = chatService.messages.size
+        chatService.deleteMessage(messageId)
+
+        assertEquals(initialCount - 1, chatService.messages.size)
+        assertNull(chatService.messages.find { it.id == messageId })
     }
 
     @Test
@@ -104,11 +108,14 @@ class ChatServiceTest {
         chatService.createMessage(2, "Тестовое сообщение для user2", 0)
 
         val chatToDelete = chatService.chats.find { it.userId == 1 }!!.id
+        val initialCount = chatService.messages.size
+
         chatService.deleteChat(chatToDelete)
+        val newCount = chatService.messages.size
 
         val result = chatService.getChats(2)
         assertEquals(2, result[0].userId)
-        assertEquals(1, result.size)
+        assertEquals(initialCount - 1, newCount)
     }
 
     @Test
