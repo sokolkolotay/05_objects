@@ -75,8 +75,12 @@ class ChatServiceTest {
         val messageId = chatService.createMessage(1, "Тестовое сообщение", 1)
         val chatId = chatService.chats.find { it.userId == 1 }!!.id
 
-        val result = chatService.deleteChat(chatId)
-        assertEquals(1, result)
+        val initialCountChat = chatService.chats.size
+        val initialCountMessage = chatService.messages.size
+
+        chatService.deleteChat(chatId)
+        assertEquals(initialCountChat - 1, chatService.chats.size)
+        assertEquals(initialCountMessage - 1, chatService.messages.size)
 
         assertNull(chatService.chats.find { it.id == chatId })
         assertNull(chatService.messages.find { it.id == messageId })
