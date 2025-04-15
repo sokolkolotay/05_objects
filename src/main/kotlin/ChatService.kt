@@ -52,12 +52,10 @@ class ChatService {
 
     fun editMessage(
         messageId: Int, text: String
-    ): Int {
+    ) {
         val message = messages.find { it.id == messageId && it.direction == 1 }
             ?: throw IllegalArgumentException("Сообщение не найдено!")
         message.text = text
-
-        return 1
     }
 
     fun readMessage(messageId: Int) {
@@ -66,19 +64,15 @@ class ChatService {
         unreadMessage?.viewStatus = true
     }
 
-    fun deleteMessage(messageId: Int): Int {
+    fun deleteMessage(messageId: Int) {
         val message = messages.find { it.id == messageId } ?: throw IllegalArgumentException("Сообщение не найдено!")
         messages.removeIf { it.id == messageId }
-
-        return 1
     }
 
-    fun deleteChat(chatId: Int): Int {
+    fun deleteChat(chatId: Int) {
         val chat = chats.find { it.id == chatId } ?: throw IllegalArgumentException("Чат не найден!")
         chats.removeIf { it.id == chatId }
         messages.removeIf { it.chatId == chat.id }
-
-        return 1
     }
 
     //Показать сколько чатов не прочитано (хотя бы одно не прочитанное сообщение)
