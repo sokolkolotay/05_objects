@@ -96,7 +96,7 @@ fun main() {
     val message4 = chatService.createMessage(1,"Четвертое сообщение", 0)
     val message5 = chatService.createMessage(1,"Четвертое сообщение", 1)
 
-    println(chatService.getChats(1))
+    println(chatService.chats.size)
 
 }
 
