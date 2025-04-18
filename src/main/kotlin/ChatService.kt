@@ -112,7 +112,6 @@ class ChatService {
             .take(amount)
             .onEach { readMessage(it.id) }
             .toList()
-        resultMessages.forEach { readMessage(it.id) }
 
         return resultMessages
     }
