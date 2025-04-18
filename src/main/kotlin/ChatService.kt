@@ -18,7 +18,7 @@ class ChatService {
     fun createMessage(
         userId: Int, text: String, direction: Int
     ): Int {
-        val existingChat = chats.find { it.userId == userId }
+        val existingChat = chats.asSequence().find { it.userId == userId }
 
         val chatId = existingChat?.id ?: addChat(userId = userId)
 
@@ -53,13 +53,14 @@ class ChatService {
     fun editMessage(
         messageId: Int, text: String
     ) {
-        val message = messages.find { it.id == messageId && it.direction == 1 }
+        val message = messages.asSequence().find { it.id == messageId && it.direction == 1 }
             ?: throw IllegalArgumentException("Сообщение не найдено!")
         message.text = text
     }
 
     fun readMessage(messageId: Int) {
-        val unreadMessage = messages.find { it.id == messageId && it.direction == 0 && it.viewStatus == false }
+        val unreadMessage =
+            messages.asSequence().find { it.id == messageId && it.direction == 0 && it.viewStatus == false }
 
         unreadMessage?.viewStatus = true
     }
@@ -77,7 +78,7 @@ class ChatService {
 
     //Показать сколько чатов не прочитано (хотя бы одно не прочитанное сообщение)
     fun getUnreadChatsCount(): Int {
-        return messages.filter { !it.viewStatus && it.direction == 0 }.map { it.chatId }.toSet().count()
+        return messages.asSequence().filter { !it.viewStatus && it.direction == 0 }.map { it.chatId }.toSet().count()
     }
 
     //Получить список чатов. Первым параметром id пользователя чтобы отделять одного пользователя от другого
@@ -90,21 +91,27 @@ class ChatService {
     }
 
     fun lastMessagesFromChats(): List<String> {
-        return chats.map { chat ->
-            val lastMessage = messages.filter { it.chatId == chat.id }.maxByOrNull { it.id }
+        return chats.asSequence().map { chat ->
+            val lastMessage = messages.asSequence()
+                .filter { it.chatId == chat.id }
+                .maxByOrNull { it.id }
 
             if (lastMessage != null) {
                 "Чат с пользователем ${chat.userId}: ${lastMessage.text}"
             } else {
                 "Чат с пользователем ${chat.userId}: нет сообщений"
             }
-        }
+        }.toList()
     }
 
     //получить список сообщений из чата
     fun messagesFromChats(chatId: Int, lastMessagesId: Int, amount: Int): List<Message> {
-        val resultMessages =
-            messages.filter { it.chatId == chatId && it.id >= lastMessagesId }.sortedBy { it.id }.take(amount)
+        val resultMessages = messages.asSequence()
+            .filter { it.chatId == chatId && it.id >= lastMessagesId }
+            .sortedBy { it.id }
+            .take(amount)
+            .onEach { readMessage(it.id) }
+            .toList()
         resultMessages.forEach { readMessage(it.id) }
 
         return resultMessages
